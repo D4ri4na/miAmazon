@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+.container {
+    padding: 30px;
+}
+
+.is-hidden {
+    display: none !important;
+}
+
+@media (max-width: 900px) {
+    .container {
+        padding: 24px 2vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 12px 2vw;
+    }
+}

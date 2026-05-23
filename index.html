@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos</title>
+    <link rel="stylesheet" href="src/css/base.css">
+    <link rel="stylesheet" href="src/css/header.css">
+    <link rel="stylesheet" href="src/css/catalog.css">
+    <link rel="stylesheet" href="src/css/detail.css">
+</head>
+<body>
+
+<header class="header">
+    <h1 class="header__logo">MiAmazon</h1>
+    <div class="header__search-container">
+        <input type="text" id="searchInput" class="header__search-input" placeholder="Buscar productos...">
+        <button id="searchBtn" class="header__search-btn">Buscar</button>
+    </div>
+</header>
+
+<main class="container">
+
+    <section id="catalogSection">
+        <div id="productGrid" class="catalog-grid"></div>
+        <p id="noResults" class="catalog-grid__no-results is-hidden">No se encontraron resultados</p>
+    </section>
+
+    <section id="detailSection" class="product-detail is-hidden">
+        <button id="backButton" class="product-detail__back-btn">← Volver</button>
+
+        <div class="product-detail__container">
+            <div class="product-detail__gallery">
+                <img id="mainImage" class="product-detail__main-image" alt="Imagen principal del producto">
+                <div id="thumbnails" class="product-detail__thumbnails"></div>
+            </div>
+
+            <div class="product-detail__info">
+                <h2 id="detailTitle" class="product-detail__title"></h2>
+                <p id="detailPrice" class="product-detail__price"></p>
+                <p class="product-detail__meta"><strong>Marca:</strong> <span id="detailBrand"></span></p>
+                <p class="product-detail__meta"><strong>Dimensiones:</strong> <span id="detailDimensions"></span></p>
+                <p class="product-detail__meta"><strong>Peso:</strong> <span id="detailWeight"></span></p>
+                <p id="detailDescription" class="product-detail__description"></p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script type="module" src="src/js/app.js"></script>
+</body>
+</html>
