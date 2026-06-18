@@ -58,4 +58,13 @@ describe('Lógica de Negocio - Catálogo Amazon', () => {
         
         getAllSpy.mockRestore();
     });
+
+    //EF
+    test('Debe retornar solo productos con stock mayor a 0 - EF', async () => {
+        const mockProducts = [{ id: 1, title: 'Laptop', stock: 5 }];
+        supabase.gt = jest.fn().mockResolvedValueOnce({ data: mockProducts, error: null });
+        
+        const result = await service.getInStock();
+        expect(result.length).toBeGreaterThan(0);
+    });
 });
