@@ -33,6 +33,10 @@ export class ProductService {
     //EF
     async getInStock() {
         const { data, error } = await supabase.from('products').select('*').gt('stock', 0);
+        if (error) {
+            console.error("Error filtrando stock:", error.message);
+            return [];
+        }
         return data;
     }
 }
