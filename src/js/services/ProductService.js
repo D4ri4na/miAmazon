@@ -29,4 +29,10 @@ export class ProductService {
         }
         return data;
     }
+
+    //EF
+    async getInStock() {
+        const { data, error } = await supabase.from('products').select('*').gt('stock', 0);
+        return data;
+    }
 }
