@@ -40,11 +40,8 @@ export class ProductService {
         return data;
     }
 
-    async calculateInventoryValue(products) {
-        let total = 0;
-        for(let i=0; i<products.length; i++) {
-            total += products[i].price * products[i].stock;
-        }
-        return total;
+    calculateInventoryValue(products) {
+        if (!products || products.length === 0) return 0;
+        return products.reduce((total, p) => total + (p.price * p.stock), 0);
     }
 }
