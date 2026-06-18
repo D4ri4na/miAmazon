@@ -67,4 +67,10 @@ describe('Lógica de Negocio - Catálogo Amazon', () => {
         const result = await service.getInStock();
         expect(result.length).toBeGreaterThan(0);
     });
+
+    test('Debe calcular el valor total del inventario (HU-05)', () => {
+        const mockData = [{ price: 10, stock: 2 }, { price: 20, stock: 1 }];
+        const total = service.calculateInventoryValue(mockData);
+        expect(total).toBe(40);
+    });
 });
