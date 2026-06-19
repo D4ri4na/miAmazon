@@ -38,8 +38,8 @@ describe('Lógica de Negocio - Catálogo Amazon', () => {
         const mockResult = [{ id: 1, title: 'Teclado Mecánico', price: 100 }];
         supabase.ilike.mockResolvedValueOnce({ data: mockResult, error: null });
 
-        const textoBusqueda = '  Teclado  '; 
-        const result = await service.search(textoBusqueda);
+        const searchQuery = '  Teclado  '; 
+        const result = await service.search(searchQuery);
         
         expect(supabase.ilike).toHaveBeenCalledWith('title', '%Teclado%');
         expect(result[0].title).toBe('Teclado Mecánico');
@@ -49,8 +49,8 @@ describe('Lógica de Negocio - Catálogo Amazon', () => {
     test('Debe detectar una búsqueda vacía y redirigir automáticamente al catálogo general (HU-02)', async () => {
         const getAllSpy = jest.spyOn(service, 'getAll').mockResolvedValue(['Catálogo General']);
         
-        const textoVacio = '    '; 
-        const result = await service.search(textoVacio);
+        const emptyQuery = '    '; 
+        const result = await service.search(emptyQuery);
         
         expect(supabase.ilike).not.toHaveBeenCalled();
         expect(getAllSpy).toHaveBeenCalledTimes(1);
