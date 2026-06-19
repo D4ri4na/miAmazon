@@ -3,16 +3,19 @@ import { supabase } from '../config/supabase.js';
 const TABLE_NAME = 'products';
 
 export class ProductService {
+    _handleError(message, error) {
+        console.error(`${message}:`, error.message);
+        return [];
+    }
+
     async getAll() {
         const { data, error } = await supabase
             .from(TABLE_NAME)
             .select('*')
             .order('id', { ascending: true });
 
-        if (error) {
-            console.error("Error cargando productos de Supabase:", error.message);
-            return [];
-        }
+       if (error) return this._handleError("Error cargando productos de Supabase", error);
+        
         return data;
     }
 
@@ -25,20 +28,25 @@ export class ProductService {
             .select('*')
             .ilike('title', `%${query}%`); 
 
-        if (error) {
-            console.error("Error buscando en Supabase:", error.message);
-            return [];
-        }
+        if (error) return this._handleError("Error buscando en Supabase", error);
+        
         return data;
     }
 
     //EF
+    async getById(id) {
+        const { data, error } = await supabase.from(TABLE_NAME).select('*').eq('id', id);
+        if (error || !data || data.length === 0) {
+            console.error("Error o producto no encontrado");
+            return null;
+        }
+        return data[0];
+    }
+
     async getInStock() {
         const { data, error } = await supabase.from(TABLE_NAME).select('*').gt('stock', 0);
-        if (error) {
-            console.error("Error filtrando stock:", error.message);
-            return [];
-        }
+        if (error) return this._handleError("Error filtrando stock", error);
+        
         return data;
     }
 
