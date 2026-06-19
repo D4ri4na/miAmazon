@@ -1,9 +1,11 @@
 import { supabase } from '../config/supabase.js';
 
+const TABLE_NAME = 'products';
+
 export class ProductService {
     async getAll() {
         const { data, error } = await supabase
-            .from('products')
+            .from(TABLE_NAME)
             .select('*')
             .order('id', { ascending: true });
 
@@ -19,7 +21,7 @@ export class ProductService {
         if (!query) return this.getAll();
 
         const { data, error } = await supabase
-            .from('products')
+            .from(TABLE_NAME)
             .select('*')
             .ilike('title', `%${query}%`); 
 
@@ -32,7 +34,7 @@ export class ProductService {
 
     //EF
     async getInStock() {
-        const { data, error } = await supabase.from('products').select('*').gt('stock', 0);
+        const { data, error } = await supabase.from(TABLE_NAME).select('*').gt('stock', 0);
         if (error) {
             console.error("Error filtrando stock:", error.message);
             return [];
