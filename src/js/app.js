@@ -6,7 +6,7 @@ export class App {
     constructor() {
         this.productService = new ProductService();
         
-        this.catalogView = new CatalogView("productGrid", "noResults", (product) => this.handleProductSelect(product));
+        this.catalogView = new CatalogView("productGrid", "noResults", (productId) => this.handleProductSelect(productId));
         this.detailView = new DetailView("detailSection", () => this.handleBackToCatalog());
 
         this.searchInput = document.getElementById("searchInput");
@@ -69,7 +69,12 @@ export class App {
         this.catalogView.render(filtered);
     }
 
-    handleProductSelect(product) {
+    async handleProductSelect(productId) {
+        const product = await this.productService.getById(productId);
+        if (!product) {
+            console.error("No se pudo cargar el producto con id:", productId);
+            return;
+        }
         this.catalogView.hide();
         this.detailView.render(product);
         this.detailView.show();

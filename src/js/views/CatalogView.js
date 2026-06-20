@@ -7,7 +7,8 @@ export class CatalogView {
     }
 
     render(products) {
-       this.grid.innerHTML = ''; 
+       this.grid.innerHTML = '';
+       this.grid.className = 'catalog-grid';
 
         if (!products || products.length === 0) {
             this.noResults.classList.remove("is-hidden");
@@ -19,25 +20,19 @@ export class CatalogView {
         products.forEach(product => {
             const card = document.createElement('div');
             card.className = 'product-card';
+
+            const outOfStock = !(product.stock > 0);
+
             card.innerHTML = `
-                <div class="product-category-badge">${product.category || 'General'}</div>
-                
-                <div class="product-image-container">
-                    <img src="${product.image_url || 'https://via.placeholder.com/150'}" alt="${product.title}" class="product-image">
-                </div>
-                
-                <div class="product-info">
-                    <h3>${product.title}</h3>
-                    <p class="product-price">$${product.price}</p>
-                    <p class="product-stock ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}">
-                        ${product.stock > 0 ? `Disponibles: ${product.stock}` : 'Agotado'}
-                    </p>
-                    <button class="view-detail-btn" data-id="${product.id}">Ver Detalle</button>
+                ${outOfStock ? `<span class="product-card__badge">Agotado</span>` : ''}
+                <img src="${product.image_url || 'https://via.placeholder.com/220x200'}" alt="${product.title}" class="product-card__image">
+                <div class="product-card__body">
+                    <h3 class="product-card__title">${product.title}</h3>
+                    <p class="product-card__price">$${product.price}</p>
                 </div>
             `;
 
-            const btn = card.querySelector('.view-detail-btn');
-            btn.addEventListener('click', () => this.onProductClick(product.id));
+            card.addEventListener('click', () => this.onProductClick(product.id));
 
             this.grid.appendChild(card);
         });

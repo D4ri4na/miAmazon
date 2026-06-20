@@ -1,35 +1,61 @@
 export class DetailView {
     constructor(sectionId, onBackClick) {
         this.section = document.getElementById(sectionId);
-        this.onBackClick = onBackClick; 
+        this.onBackClick = onBackClick;
     }
 
     render(product) {
-       this.section.innerHTML = `
-            <button id="backButton" class="back-to-catalog-btn" style="margin-bottom: 20px; padding: 10px 15px; background: #f0f2f2; border: 1px solid #d5d9d9; border-radius: 8px; cursor: pointer;">
+        const mainImage = product.image_url
+            || (product.images && product.images[0])
+            || 'https://via.placeholder.com/500x350';
+
+        const gallery = Array.isArray(product.images) ? product.images : [];
+
+        this.section.innerHTML = `
+            <button id="backButton" class="product-detail__back-btn">
                 ← Volver al Catálogo
             </button>
-            
-            <div class="product-detail-container">
-                <div class="detail-image-side">
-                    <img src="${product.image_url || 'https://via.placeholder.com/300'}" alt="${product.title}" class="detail-image">
+
+            <div class="product-detail__container">
+                <div class="product-detail__gallery">
+                    <img id="mainImage" src="${mainImage}" alt="${product.title}" class="product-detail__main-image">
+                    ${gallery.length > 1 ? `
+                        <div class="product-detail__thumbnails">
+                            ${gallery.map(img => `
+                                <img src="${img}" alt="${product.title}" class="product-detail__thumb" data-src="${img}">
+                            `).join('')}
+                        </div>
+                    ` : ''}
                 </div>
-                
-                <div class="detail-info-side">
-                    <span class="detail-category">${product.category || 'General'}</span>
-                    <h2>${product.title}</h2>
-                    <p class="detail-price">$${product.price}</p>
-                    <p class="detail-stock-status ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}">
+
+                <div class="product-detail__info">
+                    <p class="product-detail__meta">${product.category || 'General'}</p>
+                    <h2 class="product-detail__title">${product.title}</h2>
+                    <p class="product-detail__price">$${product.price}</p>
+
+                    <p class="product-detail__meta">
                         ${product.stock > 0 ? `✔ Disponible (${product.stock} unidades)` : '❌ Agotado actualmente'}
                     </p>
-                    <p class="detail-description">
-                        Adquiere este artículo con total garantía de rendimiento y calidad premium a través de nuestro catálogo miAmazon.
+
+                    ${product.brand ? `<p class="product-detail__meta"><strong>Marca:</strong> ${product.brand}</p>` : ''}
+                    ${product.dimensions ? `<p class="product-detail__meta"><strong>Dimensiones:</strong> ${product.dimensions}</p>` : ''}
+                    ${product.weight ? `<p class="product-detail__meta"><strong>Peso:</strong> ${product.weight}</p>` : ''}
+
+                    <p class="product-detail__description">
+                        ${product.description || 'Sin descripción disponible para este producto.'}
                     </p>
                 </div>
             </div>
         `;
 
         document.getElementById("backButton").addEventListener("click", this.onBackClick);
+
+        const mainImageEl = document.getElementById("mainImage");
+        this.section.querySelectorAll(".product-detail__thumb").forEach(thumb => {
+            thumb.addEventListener("click", () => {
+                mainImageEl.src = thumb.dataset.src;
+            });
+        });
     }
 
     show() {
