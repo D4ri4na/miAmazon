@@ -34,10 +34,14 @@ export class ProductService {
     }
 
     async getProductsByCategory(category) {
+        if (!category || category.trim() === '') return this.getAll();
+
         const { data, error } = await supabase
             .from(TABLE_NAME)
             .select('*')
-            .eq('category', category);
+            .eq('category', category.trim());
+
+        if (error) return this._handleError("Error filtrando por categoría", error);
         return data;
     }
 

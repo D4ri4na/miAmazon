@@ -7,28 +7,38 @@ export class CatalogView {
     }
 
     render(products) {
-        this.grid.innerHTML = "";
-        
-        if (products.length === 0) {
+       this.grid.innerHTML = ''; 
+
+        if (!products || products.length === 0) {
             this.noResults.classList.remove("is-hidden");
             return;
+        } else {
+            this.noResults.classList.add("is-hidden");
         }
-        this.noResults.classList.add("is-hidden");
 
         products.forEach(product => {
-            const card = document.createElement("div");
-            card.classList.add("product-card"); // <--- Clase BEM correcta
-
+            const card = document.createElement('div');
+            card.className = 'product-card';
             card.innerHTML = `
-                ${product.stock === 0 ? '<span class="product-card__badge">Agotado</span>' : ''}
-                <img class="product-card__image" src="${product.images[0]}?auto=format&fit=crop&w=500&q=60" alt="${product.title}">
-                <div class="product-card__body">
-                    <h3 class="product-card__title">${product.title}</h3>
-                    <p class="product-card__price">$${product.price}</p>
+                <div class="product-category-badge">${product.category || 'General'}</div>
+                
+                <div class="product-image-container">
+                    <img src="${product.image_url || 'https://via.placeholder.com/150'}" alt="${product.title}" class="product-image">
+                </div>
+                
+                <div class="product-info">
+                    <h3>${product.title}</h3>
+                    <p class="product-price">$${product.price}</p>
+                    <p class="product-stock ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}">
+                        ${product.stock > 0 ? `Disponibles: ${product.stock}` : 'Agotado'}
+                    </p>
+                    <button class="view-detail-btn" data-id="${product.id}">Ver Detalle</button>
                 </div>
             `;
 
-            card.addEventListener("click", () => this.onProductClick(product));
+            const btn = card.querySelector('.view-detail-btn');
+            btn.addEventListener('click', () => this.onProductClick(product.id));
+
             this.grid.appendChild(card);
         });
     }

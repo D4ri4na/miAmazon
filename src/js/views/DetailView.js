@@ -1,41 +1,35 @@
 export class DetailView {
     constructor(sectionId, onBackClick) {
         this.section = document.getElementById(sectionId);
-        this.backButton = document.getElementById("backButton");
-        
-        this.title = document.getElementById("detailTitle");
-        this.price = document.getElementById("detailPrice");
-        this.brand = document.getElementById("detailBrand");
-        this.dimensions = document.getElementById("detailDimensions");
-        this.weight = document.getElementById("detailWeight");
-        this.description = document.getElementById("detailDescription");
-        this.mainImage = document.getElementById("mainImage");
-        this.thumbnails = document.getElementById("thumbnails");
-
-        this.backButton.addEventListener("click", onBackClick);
+        this.onBackClick = onBackClick; 
     }
 
     render(product) {
-        this.title.textContent = product.title;
-        this.price.textContent = "$" + product.price;
-        this.brand.textContent = product.brand;
-        this.dimensions.textContent = product.dimensions;
-        this.weight.textContent = product.weight;
-        this.description.textContent = product.description;
-
-        this.mainImage.src = product.images[0] + "?auto=format&fit=crop&w=800&q=60";
-        this.thumbnails.innerHTML = "";
-
-        product.images.forEach(img => {
-            const thumb = document.createElement("img");
-            thumb.classList.add("product-detail__thumb"); // <--- Clase BEM correcta
-            thumb.src = img + "?auto=format&fit=crop&w=200&q=60";
+       this.section.innerHTML = `
+            <button id="backButton" class="back-to-catalog-btn" style="margin-bottom: 20px; padding: 10px 15px; background: #f0f2f2; border: 1px solid #d5d9d9; border-radius: 8px; cursor: pointer;">
+                ← Volver al Catálogo
+            </button>
             
-            thumb.addEventListener("click", () => {
-                this.mainImage.src = img + "?auto=format&fit=crop&w=800&q=60";
-            });
-            this.thumbnails.appendChild(thumb);
-        });
+            <div class="product-detail-container">
+                <div class="detail-image-side">
+                    <img src="${product.image_url || 'https://via.placeholder.com/300'}" alt="${product.title}" class="detail-image">
+                </div>
+                
+                <div class="detail-info-side">
+                    <span class="detail-category">${product.category || 'General'}</span>
+                    <h2>${product.title}</h2>
+                    <p class="detail-price">$${product.price}</p>
+                    <p class="detail-stock-status ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}">
+                        ${product.stock > 0 ? `✔ Disponible (${product.stock} unidades)` : '❌ Agotado actualmente'}
+                    </p>
+                    <p class="detail-description">
+                        Adquiere este artículo con total garantía de rendimiento y calidad premium a través de nuestro catálogo miAmazon.
+                    </p>
+                </div>
+            </div>
+        `;
+
+        document.getElementById("backButton").addEventListener("click", this.onBackClick);
     }
 
     show() {
