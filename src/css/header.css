@@ -16,23 +16,11 @@
     gap: 10px;
 }
 
-.header__category-select {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: none;
-    background-color: white;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 1rem;
-    outline: none;
-}
-
 .header__search-input {
     padding: 8px 12px;
     border-radius: 6px;
     border: none;
     width: 250px;
-    outline: none;
 }
 
 .header__search-btn {
@@ -71,7 +59,6 @@
         font-size: 1.4rem;
     }
     
-    .header__category-select,
     .header__search-input {
         width: 100%;
     }

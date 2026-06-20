@@ -1,3 +1,27 @@
+.category-filter {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.category-filter__label {
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.category-filter__select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background-color: white;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    min-width: 200px;
+}
+
 .catalog-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
