@@ -73,4 +73,14 @@ describe('Lógica de Negocio - Catálogo Amazon', () => {
         const total = service.calculateInventoryValue(mockData);
         expect(total).toBe(40);
     });
+
+    test('Debe retornar productos filtrados por una categoria especifica (HU-06)', async () => {
+        const mockCategoryData = [{ id: 1, title: 'Laptop', category: 'Electrónica' }];
+        supabase.eq = jest.fn().mockResolvedValueOnce({ data: mockCategoryData, error: null });
+        supabase.select.mockReturnThis(); 
+
+        const result = await service.getProductsByCategory('Electrónica');
+
+        expect(result[0].category).toBe('Electrónica');
+    });
 });
