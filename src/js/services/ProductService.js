@@ -33,6 +33,14 @@ export class ProductService {
         return data;
     }
 
+    async getProductsByCategory(category) {
+        const { data, error } = await supabase
+            .from(TABLE_NAME)
+            .select('*')
+            .eq('category', category);
+        return data;
+    }
+
     //EF
     async getById(id) {
         const { data, error } = await supabase.from(TABLE_NAME).select('*').eq('id', id);

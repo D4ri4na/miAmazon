@@ -11,6 +11,7 @@ export class App {
 
         this.searchInput = document.getElementById("searchInput");
         this.searchBtn = document.getElementById("searchBtn");
+        this.categorySelect = document.getElementById("categorySelect");
 
         this.initEvents();
     }
@@ -18,10 +19,22 @@ export class App {
     async init() {
         try {
             const initialProducts = await this.productService.getAll();
+            this.populateCategories(initialProducts);
             this.catalogView.render(initialProducts);
         } catch (error) {
             console.error("Error al inicializar la base de datos:", error);
         }
+    }
+
+    populateCategories(products) {
+        if (!this.categorySelect) return;
+        const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+        categories.forEach(cat => {
+            const option = document.createElement("option");
+            option.value = cat;
+            option.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+            this.categorySelect.appendChild(option);
+        });
     }
 
     initEvents() {
@@ -31,9 +44,27 @@ export class App {
                 this.handleSearch();
             }
         });
+
+        if (this.categorySelect) {
+            this.categorySelect.addEventListener("change", (e) => this.handleCategoryChange(e.target.value));
+        }
+    }
+
+    async handleCategoryChange(category) {
+        this.searchInput.value = ""; // Limpiar busqueda
+        if (!category) {
+            const products = await this.productService.getAll();
+            this.catalogView.render(products);
+        } else {
+            const products = await this.productService.getProductsByCategory(category);
+            this.catalogView.render(products);
+        }
     }
 
     async handleSearch() {
+        if (this.categorySelect) {
+            this.categorySelect.value = ""; // Limpiar categoria
+        }
         const filtered = await this.productService.search(this.searchInput.value);
         this.catalogView.render(filtered);
     }
